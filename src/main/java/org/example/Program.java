@@ -1,6 +1,7 @@
 package org.example;
 
-import enums.Command;
+
+import org.example.enums.Command;
 
 import java.util.Scanner;
 
@@ -23,6 +24,8 @@ public class Program {
                     case DELETE_RECORD_BY_ID -> budget.deleteRecordById(sc);
                     case EDIT_RECORD_BY_ID -> budget.editRecordById(sc);
                     case REPLACE_RECORD_BY_ID -> budget.replaceRecordById(sc);
+                    case SAVE_DATA_TO_FILE -> budget.saveRecordsToFile(sc);
+                    case READ_DATA_FROM_FILE -> budget.readRecordsFromFile(sc);
                     case null, default -> System.out.println("Neatpazinta komanda");
                 }
             } catch (Exception e) {
