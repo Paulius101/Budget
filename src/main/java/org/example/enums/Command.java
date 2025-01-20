@@ -1,5 +1,4 @@
-package enums;
-
+package org.example.enums;
 import java.util.Scanner;
 
 public enum Command {
@@ -11,7 +10,9 @@ public enum Command {
     PRINT_ALL_INCOMES(5, "Atspausdinti visas pajamas"),
     DELETE_RECORD_BY_ID(6, "Istrinti irasa pagal ID"),
     EDIT_RECORD_BY_ID(7, "Redaguoti irasa pagal ID"),
-    REPLACE_RECORD_BY_ID(8, "Atnaujinti objekta pagal ID");
+    REPLACE_RECORD_BY_ID(8, "Atnaujinti objekta pagal ID"),
+    SAVE_DATA_TO_FILE(9, "Isaugoti duomenis i faila"),
+    READ_DATA_FROM_FILE(10, "Gauti duomenis is failo");
 
     private final Integer id;
     private final String description;

@@ -1,15 +1,22 @@
 package org.example;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import enums.Currency;
 import enums.ExpenseCategory;
 import enums.IncomeCategory;
 import enums.PaymentMethod;
+import org.example.enums.FileType;
+import org.example.enums.ReadFromFileTypeCommand;
+import org.example.enums.SaveToFileTypeCommand;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+
+import static org.example.enums.SaveToFileTypeCommand.TO_CSV;
 
 public class Budget {
     private static final ArrayList<Record> RECORDS = new ArrayList<>();
@@ -28,18 +35,18 @@ public class Budget {
         ));
     }
 
-    public void addRecord(Record record){
+    public void addRecord(Record record) {
         RECORDS.add(record);
     }
 
-    public void replaceRecordById(Scanner sc){
+    public void replaceRecordById(Scanner sc) {
         System.out.println("Elemento atnaujinimas");
         System.out.println("Iveskite iraso ID kuri norite atnaujinti:");
         long id = Long.parseLong(sc.nextLine());
         System.out.println("Ar norite ivesti islaidu ar pajamu irasa?");
         System.out.println("[P] - pajamu irasas, [I] - islaidu irasas");
         Record updatedRecord;
-        switch(sc.nextLine().toUpperCase()){
+        switch (sc.nextLine().toUpperCase()) {
             case "I" -> updatedRecord = new ExpenseRecord(sc, id);
             case "P" -> updatedRecord = new IncomeRecord(sc, id);
             default -> updatedRecord = new Record(sc, id);
@@ -47,17 +54,17 @@ public class Budget {
         replaceRecord(updatedRecord);
     }
 
-    private void replaceRecord(Record record){
+    private void replaceRecord(Record record) {
         int index = RECORDS.indexOf(record);
 
-        if (index == -1){
+        if (index == -1) {
             System.out.println("Irasas nerastas");
         }
 
         RECORDS.set(index, record);
     }
 
-    public void editRecordById(Scanner sc){
+    public void editRecordById(Scanner sc) {
         System.out.println("Elemento redagavimas");
         Record recordToUpdate = getRecordById(sc);
         recordToUpdate.editRecord(sc);
@@ -68,7 +75,7 @@ public class Budget {
         Long id = Long.parseLong(sc.nextLine());
         int index = RECORDS.indexOf(new Record(id));
 
-        if (index == -1){
+        if (index == -1) {
             System.out.println("Irasas nerastas");
             return null;
         }
@@ -93,11 +100,11 @@ public class Budget {
     public Double getBalance() {
         Double balance = 0.0;
 
-        for (Record r: RECORDS){
-            if (r instanceof ExpenseRecord){
+        for (Record r : RECORDS) {
+            if (r instanceof ExpenseRecord) {
                 balance -= r.getAmount();
             }
-            if (r instanceof IncomeRecord){
+            if (r instanceof IncomeRecord) {
                 balance += r.getAmount();
             }
         }
@@ -105,20 +112,20 @@ public class Budget {
         return balance;
     }
 
-    private List<ExpenseRecord> getAllExpenses(){
+    private List<ExpenseRecord> getAllExpenses() {
         ArrayList<ExpenseRecord> expenses = new ArrayList<>();
-        for (Record r: RECORDS){
-            if (r instanceof ExpenseRecord e){
+        for (Record r : RECORDS) {
+            if (r instanceof ExpenseRecord e) {
                 expenses.add(e);
             }
         }
         return expenses;
     }
 
-    private List<IncomeRecord> getAllIncomes(){
+    private List<IncomeRecord> getAllIncomes() {
         ArrayList<IncomeRecord> incomes = new ArrayList<>();
-        for (Record r: RECORDS){
-            if (r instanceof IncomeRecord i){
+        for (Record r : RECORDS) {
+            if (r instanceof IncomeRecord i) {
                 incomes.add(i);
             }
         }
@@ -142,4 +149,19 @@ public class Budget {
         }
         System.out.println("----------------------------------------------------------------");
     }
+
+    public void saveRecordsToFile(Scanner sc) throws IOException {
+        switch (SaveToFileTypeCommand.selectCommand(sc)) {
+            case TO_CSV -> File.saveDataToFile(FileType.CSV, RECORDS);
+            case TO_JSON -> File.saveDataToFile(FileType.JSON, RECORDS);
+        }
+    }
+
+    public void readRecordsFromFile(Scanner sc) throws JsonProcessingException {
+        switch (ReadFromFileTypeCommand.selectCommand(sc)) {
+            case FROM_CSV -> File.readDataFromFile(FileType.CSV);
+            case FROM_JSON -> File.readDataFromFile(FileType.JSON);
+        }
+    }
 }
+

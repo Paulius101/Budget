@@ -1,7 +1,6 @@
 package org.example;
-
-import enums.Command;
 import enums.Currency;
+import org.example.enums.Command;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -13,6 +12,9 @@ public class Record {
     private Currency currency;
     private String description;
     private LocalDateTime timestamp;
+
+    public Record() {
+    }
 
     public Record(Long id) {
         this.id = id;
@@ -49,6 +51,38 @@ public class Record {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 
     public void editRecord(Scanner sc) {
